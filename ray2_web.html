@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marine Voyage | My Portfolio</title>
+    <!-- 引入美观的字体和图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* 1. 全局样式设置 */
+        :root {
+            --ocean-light: #e0f2f7;   /* 淡蓝 */
+            --ocean-medium: #4fc3f7;  /* 亮蓝 */
+            --ocean-deep: #0277bd;    /* 深海蓝 */
+            --text-color: #2c3e50;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Montserrat', 'PingFang SC', sans-serif;
+        }
+
+        body {
+            background-color: #f0faff;
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+
+        /* 2. 语言切换按钮 */
+        .lang-switch {
+            position: fixed; top: 20px; right: 20px; z-index: 2000;
+            background: var(--ocean-deep); color: white; border: none;
+            padding: 10px 18px; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-weight: bold; transition: 0.3s;
+        }
+        .lang-switch:hover { transform: scale(1.1); background: #01579b; }
+
+        /* 切换逻辑：默认显示英文，body含有zh-mode时显示中文 */
+        [lang="zh"] { display: none; }
+        body.zh-mode [lang="en"] { display: none; }
+        body.zh-mode [lang="zh"] { display: block; }
+
+        /* 3. 导航栏 */
+        nav {
+            position: fixed; width: 100%; padding: 20px;
+            display: flex; justify-content: center; z-index: 1000;
+            background: rgba(240, 250, 255, 0.8); backdrop-filter: blur(8px);
+        }
+        nav a {
+            margin: 0 15px; text-decoration: none; color: var(--ocean-deep);
+            font-weight: 600; font-size: 0.9rem; transition: 0.3s;
+        }
+        nav a:hover { color: var(--ocean-medium); }
+
+        /* 4. 首页 (About Me) - 换成了鱼群背景 */
+        header {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            position: relative;
+            /* 这里换成了深海鱼群的图片 */
+            background: linear-gradient(rgba(255,255,255,0.1), rgba(0,0,0,0.2)), 
+                        url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white;
+        }
+        header h1 { font-size: 4rem; text-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-bottom: 1rem; }
+        
+        .waves { position: absolute; bottom: 0; width: 100%; height: 80px; }
+
+        /* 5. 通用区块样式 */
+        section { padding: 80px 10%; max-width: 1200px; margin: 0 auto; }
+        h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: var(--ocean-deep); }
+        h2::after { content: ' 🌊'; }
+
+        /* 6. 背景区域 (学术之锚 & 职业航程) */
+        .background-split { display: flex; gap: 30px; flex-wrap: wrap; }
+        .bg-column { flex: 1; min-width: 320px; }
+        .column-title { 
+            font-size: 1.6rem; color: var(--ocean-deep); margin-bottom: 25px;
+            display: flex; align-items: center; gap: 10px; padding-bottom: 10px;
+            border-bottom: 2px solid var(--ocean-light);
+        }
+        .background-card {
+            background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-left: 5px solid var(--ocean-medium);
+            transition: 0.3s;
+        }
+        .background-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(129,212,250,0.3); }
+        .date-tag { 
+            display: inline-block; background: var(--ocean-light); color: var(--ocean-deep);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px;
+        }
+
+        /* 7. 项目与技能 */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .project-card { 
+            background: white; border-radius: 15px; padding: 25px; 
+            border: 1px solid var(--ocean-light); transition: 0.3s;
+        }
+        .project-card:hover { background: var(--ocean-light); }
+        
+        .skills-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .skill-bubble { 
+            background: white; padding: 12px 25px; border-radius: 50px; 
+            border: 2px solid var(--ocean-medium); font-weight: bold; color: var(--ocean-deep);
+        }
+
+        /* 8. 总结区域 */
+        .summary-box {
+            background: linear-gradient(135deg, var(--ocean-medium), var(--ocean-deep));
+            color: white; padding: 50px; border-radius: 25px; text-align: center;
+        }
+
+        footer { text-align: center; padding: 30px; color: #999; font-size: 0.8rem; }
+
+        /* 移动端调整 */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            section { padding: 60px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="lang-switch" onclick="toggleLanguage()">EN / 中文</button>
+
+    <nav>
+        <a href="#about"><span lang="en">Home</span><span lang="zh">首页</span></a>
+        <a href="#background"><span lang="en">Voyage</span><span lang="zh">轨迹</span></a>
+        <a href="#projects"><span lang="en">Projects</span><span lang="zh">项目</span></a>
+        <a href="#skills"><span lang="en">Tools</span><span lang="zh">技能</span></a>
+        <a href="#summary"><span lang="en">Contact</span><span lang="zh">联系</span></a>
+    </nav>
+
+    <!-- 1. 关于我 (首页) -->
+    <header id="about">
+        <h1>
+            <span lang="en">I'm Ran Ye</span>
+            <span lang="zh">我是 冉也</span>
+        </h1>
+        <p style="font-size: 1.4rem; font-weight: 300;">
+            <span lang="en">Marine Specialist & Ocean Enthusiast</span>
+            <span lang="zh">海洋建模专家 & 蓝色海洋的热爱者</span>
+        </p>
+        
+        <!-- 底部波浪效果 -->
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+            <defs><path id="wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g class="parallax">
+                <use xlink:href="#wave" x="48" y="0" fill="rgba(240, 250, 255, 0.7)" />
+                <use xlink:href="#wave" x="48" y="7" fill="#f0faff" />
+            </g>
+        </svg>
+    </header>
+
+    <!-- 2. 学术与职业背景 -->
+    <section id="background">
+        <h2>
+            <span lang="en">My Voyage</span><span lang="zh">我的航程</span>
+        </h2>
+        
+        <div class="background-split">
+            <!-- 学术之锚 -->
+            <div class="bg-column">
+                <h3 class="column-title">
+                    <i class="fas fa-anchor"></i>
+                    <span lang="en">Academic Anchors</span>
+                    <span lang="zh">学术之锚</span>
+                </h3>
+                
+                <!-- 修改这里的内容 -->
+                <div class="background-card">
+                    <span class="date-tag">2020 - 2024</span>
+                    <h4>[Your University]</h4>
+                    <p style="color: var(--ocean-deep);">Marine Biology / B.S.</p>
+                    <p>在这里描述你的学习经历、主修课程或荣誉。</p>
+                </div>
+            </div>
+
+            <!-- 职业航程 -->
+            <div class="bg-column">
+                <h3 class="column-title">
+                    <i class="fas fa-ship"></i>
+                    <span lang="en">Professional Voyages</span>
+                    <span lang="zh">职业航程</span>
+                </h3>
+                
+                <!-- 修改这里的内容 -->
+                <div class="background-card">
+                    <span class="date-tag">2024 - Present</span>
+                    <h4>[Company Name]</h4>
+                    <p style="color: var(--ocean-deep);">Ocean Data Analyst</p>
+                    <p>描述你的工作职责、参与的项目或取得的成就。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 项目展示 -->
+    <section id="projects">
+        <h2><span lang="en">Exhibitions</span><span lang="zh">项目案例</span></h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3>Project Blue</h3>
+                <p>一个关于海洋生态保护的数字化展示项目。</p>
+            </div>
+            <div class="project-card">
+                <h3>Deep Sea App</h3>
+                <p>为潜水爱好者开发的实用工具应用。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 技能 -->
+    <section id="skills">
+        <h2><span lang="en">Navigation Tools</span><span lang="zh">专业技能</span></h2>
+        <div class="skills-wrap">
+            <div class="skill-bubble">Python</div>
+            <div class="skill-bubble">Data Analysis</div>
+            <div class="skill-bubble">GIS</div>
+            <div class="skill-bubble">Diving Certificate</div>
+        </div>
+    </section>
+
+    <!-- 5. 总结 -->
+    <section id="summary">
+        <div class="summary-box">
+            <h2><span lang="en">Get In Touch</span><span lang="zh">保持联系</span></h2>
+            <p style="margin: 20px 0;">如果你对我的经历感兴趣，或者想一起开启新的航程，欢迎联系我！</p>
+            <p><strong>Email: yourname@example.com</strong></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 [Ray2]. All Rights Reserved. 🌊</p>
+    </footer>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('zh-mode');
+        }
+    </script>
+</body>
+</html>
